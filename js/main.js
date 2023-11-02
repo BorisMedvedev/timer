@@ -1,14 +1,19 @@
 const init = () => {
+  const debounce = (callback, delay) => {
+    let timerId;
+    return function() {
+      clearTimeout(timerId);
+      timerId = setTimeout(() => {
+        callback.apply(this, arguments);
+      }, delay);
+    };
+  };
   const input = document.querySelector('input');
   const paragraph = document.querySelector('p');
-  let timeoutId;
-
-  input.addEventListener('change', () => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      paragraph.textContent = input.value;
-    }, 300);
-  });
+  const updateParagraph = debounce(() => {
+    paragraph.textContent = input.value;
+  }, 300);
+  input.addEventListener('input', updateParagraph);
 };
 
 init();
